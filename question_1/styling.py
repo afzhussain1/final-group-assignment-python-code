@@ -1,3 +1,3 @@
 class Styling:
-    def applyStyle(self, widget, style):
+    def applyStyle(a, widget, style):
         widget.config(style=style)
