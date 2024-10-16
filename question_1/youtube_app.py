@@ -1,4 +1,5 @@
 import tkinter as tk
+import re
 from tkinter import ttk, messagebox
 from transformers import MarianMTModel, MarianTokenizer
 from user_interface import UserInterFace
@@ -11,8 +12,6 @@ def logMethodCall(func):
         print(f"Method is calling on the run time: {func.__name__}")
         return func(*args, **kwargs)
     return wrapper
-
-# Main Application  to call the other classes
 class YouTubeApp(UserInterFace, Styling):
     def __init__(a, root):
         super().__init__(root)
@@ -33,12 +32,12 @@ class YouTubeApp(UserInterFace, Styling):
         a.root.title(a._title)
         a.LoginSignup()
 
-    @logMethodCall  
+    @logMethodCall
     def LoginSignup(a):
         loginFrame = ttk.Frame(a.root)
         loginFrame.pack(side=tk.TOP, fill=tk.X, padx=10, pady=10)
 
-        ttk.Label(loginFrame, text="Username:").grid(row=0, column=0, padx=5, pady=5)
+        ttk.Label(loginFrame, text="Username (Email):").grid(row=0, column=0, padx=5, pady=5)
         a.userInput = ttk.Entry(loginFrame)
         a.userInput.grid(row=0, column=1, padx=5, pady=5)
 
@@ -48,6 +47,7 @@ class YouTubeApp(UserInterFace, Styling):
 
         ttk.Button(loginFrame, text="Login", command=a.login).grid(row=2, column=0, padx=5, pady=5)
         ttk.Button(loginFrame, text="Signup", command=a.signup).grid(row=2, column=1, padx=5, pady=5)
+
     @logMethodCall  # calling logging
     def login(a):
         username = a.userInput.get()
@@ -59,10 +59,21 @@ class YouTubeApp(UserInterFace, Styling):
         else:
             messagebox.showerror("Login Failed", "Invalid credentials")
 
-    @logMethodCall # again calling the login method
+    @logMethodCall  # again calling the login method
     def signup(a):
         username = a.userInput.get()
         password = a.passwordInput.get()
+
+        # Validate email format
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", username):
+            messagebox.showerror("Signup Failed", "Invalid email format!")
+            return
+
+        # Validate password requirements
+        if len(password) < 5 or not any(char.isupper() for char in password):
+            messagebox.showerror("Signup Failed", "Password must be at least 5 characters long and contain at least one uppercase letter!")
+            return
+
         # User registration logic
         if username in a.users:
             messagebox.showerror("Signup Failed", "Username already exists!")
@@ -72,8 +83,7 @@ class YouTubeApp(UserInterFace, Styling):
             a.users[username] = password
             messagebox.showinfo("Signup Success", f"User {username} registered successfully!")
 
-    @logMethodCall  
-    # if it is checked and becom true
+    @logMethodCall
     def Authenticated(a):
         for widget in a.root.winfo_children():
             widget.destroy()
@@ -82,16 +92,15 @@ class YouTubeApp(UserInterFace, Styling):
         a.videoList()
         a.translationB()
 
-    @logMethodCall  
+    @logMethodCall
     def header(a):
         headerFrame = ttk.Frame(a.root)
         headerFrame.pack(side=tk.TOP, fill=tk.X)
-        # multiple inheritance
-        a.applyStyle(headerFrame, "Header.TFrame")  
+        a.applyStyle(headerFrame, "Header.TFrame")
         titleLabel = ttk.Label(headerFrame, text=a._title, style="Header.TLabel")
         titleLabel.pack(padx=10, pady=10)
 
-    @logMethodCall  
+    @logMethodCall
     def videoList(a):
         videoFrame = ttk.Frame(a.root)
         videoFrame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
@@ -99,19 +108,19 @@ class YouTubeApp(UserInterFace, Styling):
         for video in videos:
             a.videoItem(videoFrame, video)
 
-    @logMethodCall  
+    @logMethodCall
     def videoItem(a, parent, videoName):
         video_label = ttk.Label(parent, text=videoName, style="Video.TLabel")
         video_label.pack(padx=10, pady=5, anchor="w")
 
-    @logMethodCall  
+    @logMethodCall
     def translationB(a):
         buttonFrame = ttk.Frame(a.root)
         buttonFrame.pack(side=tk.TOP, fill=tk.X)
         tButton = ttk.Button(buttonFrame, text="Translated Text", command=a.showTranslation)
         tButton.pack(padx=10, pady=10)
 
-    @logMethodCall  
+    @logMethodCall
     def showTranslation(a):
         translationWindow = tk.Toplevel(a.root)
         translationWindow.title("Translate Text")
@@ -138,7 +147,6 @@ class YouTubeApp(UserInterFace, Styling):
         tButton.grid(row=2, columnspan=2, pady=10)
 
     def translateText(a, text, targetLang):
-
         modelName = f'Helsinki-NLP/opus-mt-en-{targetLang}'
         tokenizer = MarianTokenizer.from_pretrained(modelName)
         model = MarianMTModel.from_pretrained(modelName)
@@ -147,13 +155,13 @@ class YouTubeApp(UserInterFace, Styling):
         translatedT = tokenizer.decode(translated[0], skip_special_tokens=True)
         return translatedT
 
-# defing the custom class
+# Defining the custom class
 class CustomYouTubeApp(YouTubeApp):
-    @logMethodCall  
+    @logMethodCall
     def header(a):
-        super().header() 
+        super().header()
         headerFrame = ttk.Frame(a.root)
         headerFrame.pack(side=tk.TOP, fill=tk.X)
-        a.applyStyle(headerFrame, "CustomHeader.TFrame")  
+        a.applyStyle(headerFrame, "CustomHeader.TFrame")
         subtitleLabel = ttk.Label(headerFrame, text="Welcome to the Custom YouTube App!", style="CustomHeader.TLabel")
         subtitleLabel.pack(padx=10, pady=5)
