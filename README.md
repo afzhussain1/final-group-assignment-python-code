@@ -87,3 +87,57 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+# Side-Scrolling 2D Game
+
+This is a simple side-scrolling 2D game built using Pygame. In the game, the player can move left and right, jump, and shoot projectiles to defeat enemies and collect collectibles. The game includes levels, score tracking, and lives management.
+
+## Features
+
+- Fullscreen game display
+- Player movement (left, right, jump)
+- Shooting projectiles
+- Enemy and collectible spawning
+- Collision detection
+- Score, lives, and level tracking
+
+## Requirements
+
+- Python 3.x
+- Pygame
+
+## Installation
+
+1. Install Python from [python.org](https://www.python.org/).
+2. Install Pygame by running the following command:
+
+   ```bash
+   pip install pygame
+
+
+   Running the Game
+Save the game script as main.py.
+
+Ensure that the images (player.png, enemy.png, miscellaneous-angle.png, sdd.png) are located in the directory specified in the script or adjust the file paths accordingly.
+
+Run the game by executing the following command in the terminal:
+
+bash
+Copy code
+python main.py
+Controls
+Left Arrow Key: Move left
+Right Arrow Key: Move right
+Spacebar: Jump
+F Key: Shoot projectile
+Game Logic
+The player starts with 3 lives.
+The player can move left and right and jump.
+The player can shoot projectiles to defeat enemies.
+Enemies move horizontally and bounce off the screen edges.
+Collectibles appear randomly and can be collected to increase the score.
+The game progresses through levels, with the number of enemies increasing in each level.
+If the player collides with an enemy, they lose a life.
+If the player collects a collectible, their score increases.
+If the player loses all lives, the game ends.
