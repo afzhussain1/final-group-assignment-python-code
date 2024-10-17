@@ -176,7 +176,16 @@ class YouTubeApp:
         textEntry.grid(row=0, column=1, padx=10, pady=10)
 
         ttk.Label(translationWindow, text="Select target language:", style="Custom.TLabel").grid(row=1, column=0, padx=10, pady=10)
-        langCbox = ttk.Combobox(translationWindow, values=["fr", "de", "es"])  # Example languages
+        languages = [
+            "af", "sq", "am", "ar", "hy", "as", "az", "bn", "eu", "be", "bs", "bg", "ca", "ceb", "ny", "zh", "co", "hr", 
+            "cs", "da", "nl", "en", "eo", "et", "tl", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", 
+            "iw", "hi", "hmn", "hu", "is", "ig", "id", "ga", "it", "ja", "jw", "kn", "kk", "km", "rw", "ko", "ku", "ky", 
+            "lo", "la", "lv", "lt", "lb", "mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "or", "ps", 
+            "fa", "pl", "pt", "pa", "ro", "ru", "sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", 
+            "sw", "sv", "tg", "ta", "tt", "te", "th", "tr", "tk", "uk", "ur", "ug", "uz", "vi", "cy", "xh", "yi", "yo", 
+            "zu"
+        ]
+        langCbox = ttk.Combobox(translationWindow, values=languages)
         langCbox.grid(row=1, column=1, padx=10, pady=10)
         langCbox.current(0)
 
