@@ -1,6 +1,6 @@
 # YouTube Like Interface Application
 
-This is a simple YouTube-like interface application built using Python and Tkinter. The application demonstrates various programming concepts such as encapsulation, polymorphism, multiple inheritance, and decorators. Additionally, it integrates with MarianMT for text translation.
+This is a simple YouTube-like interface application built using Python and Tkinter. The application demonstrates various programming concepts such as encapsulation, polymorphism, multiple inheritance, and decorators. Additionally, it integrates with MarianMT for text translation and TensorFlow for image classification.
 
 ## Table of Contents
 - [Features](#features)
@@ -14,6 +14,7 @@ This is a simple YouTube-like interface application built using Python and Tkint
 - User login and signup functionality
 - Video list display
 - Text translation using MarianMT
+- Image classification using TensorFlow
 - Customizable styles through multiple inheritance
 - Logging of method calls using decorators
 
@@ -43,6 +44,7 @@ This is a simple YouTube-like interface application built using Python and Tkint
     tk
     pillow
     opencv-python
+    tensorflow
     ```
 
 ## Usage
@@ -51,28 +53,6 @@ This is a simple YouTube-like interface application built using Python and Tkint
     ```bash
     python main.py
     ```
-
-
-
-    ### main.py
-This is the main script where the application is initialized and run. It contains the primary class `YouTubeApp` and its methods.
-
-### user_interface.py
-This file contains the `UserInterFace` class, which manages the user interface components.
-
-### styling.py
-This file contains the `Styling` class, which is responsible for the application's visual styles and themes.
-
-### requirements.txt
-This file lists the dependencies required to run the application, such as `transformers`, `torch`, `tk`, `pillow`, and `opencv-python`.
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request with your improvements.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 2. **Login or Signup**:
     - Enter a username and password to log in or sign up.
@@ -83,5 +63,27 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 4. **Translate Text**:
     - Click on the "Translate Text" button to open a new window where you can enter text and select a target language for translation.
 
+5. **Classify Images**:
+    - Click on the "Classify Image" button to open a file dialog and select an image for classification.
+
 ## Project Structure
 
+### main.py
+This is the main script where the application is initialized and run. It contains the primary class `YouTubeApp` and its methods.
+
+### user_interface.py
+This file contains the `UserInterFace` class, which manages the user interface components.
+
+### styling.py
+This file contains the `Styling` class, which is responsible for the application's visual styles and themes.
+
+### requirements.txt
+This file lists the dependencies required to run the application, such as `transformers`, `torch`, `tk`, `pillow`, `opencv-python`, and `tensorflow`.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your improvements.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
