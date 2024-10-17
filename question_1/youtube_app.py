@@ -4,7 +4,9 @@ from tkinter import ttk, messagebox
 from transformers import MarianMTModel, MarianTokenizer
 from user_interface import UserInterFace
 from styling import Styling
-
+import cv2
+import numpy as np
+from PIL import Image, ImageTk
 
 # Logging method with the Decorator
 def logMethodCall(func):
@@ -12,54 +14,56 @@ def logMethodCall(func):
         print(f"Method is calling on the run time: {func.__name__}")
         return func(*args, **kwargs)
     return wrapper
-class YouTubeApp(UserInterFace, Styling):
+
+class YouTubeApp:
     def __init__(a, root):
-        super().__init__(root)
-        a._title = "YouTube Like Interface"  # Encapsulation
-        a.users = {}  # empty object to store user credentials
-        a.setupUi()  # Encapsulation
+        a.root = root
+        a._title = "YouTube Like Interface"  
+        a.users = {}  # Empty object to store user credentials
+        a.setupUi()  
 
     @property
-    def title(a):  # Encapsulation with getter
+    def title(a):  
         return a._title
 
     @title.setter
-    def title(a, value):  # Encapsulation with setter
+    def title(a, value):  
         a._title = value
 
-    @logMethodCall  # logging
+    @logMethodCall  # Logging
     def setupUi(a):
         a.root.title(a._title)
+        a.root.configure(bg='#FF0000')  # Set the background color to YouTube red
         a.LoginSignup()
 
-    @logMethodCall
+    @logMethodCall  # decorator
     def LoginSignup(a):
-        loginFrame = ttk.Frame(a.root)
+        loginFrame = ttk.Frame(a.root, style="Custom.TFrame")
         loginFrame.pack(side=tk.TOP, fill=tk.X, padx=10, pady=10)
 
-        ttk.Label(loginFrame, text="Username (Email):").grid(row=0, column=0, padx=5, pady=5)
+        ttk.Label(loginFrame, text="Username (Email):", style="Custom.TLabel").grid(row=0, column=0, padx=5, pady=5)
         a.userInput = ttk.Entry(loginFrame)
         a.userInput.grid(row=0, column=1, padx=5, pady=5)
 
-        ttk.Label(loginFrame, text="Password:").grid(row=1, column=0, padx=5, pady=5)
+        ttk.Label(loginFrame, text="Password:", style="Custom.TLabel").grid(row=1, column=0, padx=5, pady=5)
         a.passwordInput = ttk.Entry(loginFrame, show="*")
         a.passwordInput.grid(row=1, column=1, padx=5, pady=5)
 
         ttk.Button(loginFrame, text="Login", command=a.login).grid(row=2, column=0, padx=5, pady=5)
         ttk.Button(loginFrame, text="Signup", command=a.signup).grid(row=2, column=1, padx=5, pady=5)
 
-    @logMethodCall  # calling logging
+    @logMethodCall
     def login(a):
         username = a.userInput.get()
         password = a.passwordInput.get()
-        # apply logic to check the authentication
+        # Logic to check authentication
         if username in a.users and a.users[username] == password:
             messagebox.showinfo("Login Success", "Welcome!")
             a.Authenticated()
         else:
-            messagebox.showerror("Login Failed", "Invalid credentials")
+            messagebox.showerror("Login Failed", "Invalid credentials") # calling the error function
 
-    @logMethodCall  # again calling the login method
+    @logMethodCall
     def signup(a):
         username = a.userInput.get()
         password = a.passwordInput.get()
@@ -83,7 +87,7 @@ class YouTubeApp(UserInterFace, Styling):
             a.users[username] = password
             messagebox.showinfo("Signup Success", f"User {username} registered successfully!")
 
-    @logMethodCall
+    @logMethodCall 
     def Authenticated(a):
         for widget in a.root.winfo_children():
             widget.destroy()
@@ -94,28 +98,70 @@ class YouTubeApp(UserInterFace, Styling):
 
     @logMethodCall
     def header(a):
-        headerFrame = ttk.Frame(a.root)
+        headerFrame = ttk.Frame(a.root, style="Custom.TFrame")
         headerFrame.pack(side=tk.TOP, fill=tk.X)
-        a.applyStyle(headerFrame, "Header.TFrame")
-        titleLabel = ttk.Label(headerFrame, text=a._title, style="Header.TLabel")
+        titleLabel = ttk.Label(headerFrame, text=a._title, style="Custom.TLabel")
         titleLabel.pack(padx=10, pady=10)
 
     @logMethodCall
     def videoList(a):
-        videoFrame = ttk.Frame(a.root)
+        videoFrame = ttk.Frame(a.root, style="Custom.TFrame")
         videoFrame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        videos = ["Video 1", "Video 2", "Video 3", "Video 4"]
-        for video in videos:
-            a.videoItem(videoFrame, video)
+
+        # objects to URLs
+        videos = {
+            "Video 1": "https://www.youtube.com/watch?v=L0EaiHdGs5k&list=RDL0EaiHdGs5k&start_radio=1",
+            "Video 2": "https://www.youtube.com/watch?v=kqtD5dpn9C8",
+            "Video 3": "https://www.youtube.com/watch?v=kqtD5dpn9C2",
+            "Video 4": "https://www.youtube.com/watch?v=kqtD5dpn9C8"
+        }
+        print("videoList method called. Videos to display:", videos)  # Debug statement
+        for videoName, videoURL in videos.items():
+            a.videoItem(videoFrame, videoName, videoURL)
 
     @logMethodCall
-    def videoItem(a, parent, videoName):
+    def videoItem(a, parent, videoName, videoURL):
+        print("videoItem method called with video:", videoName)  
         video_label = ttk.Label(parent, text=videoName, style="Video.TLabel")
         video_label.pack(padx=10, pady=5, anchor="w")
 
+        # button to open the 
+        video_label.bind("<Button-1>", lambda e: a.playVideo(videoURL))
+
+    @logMethodCall
+    def playVideo(a, videoURL):
+        vWindow = tk.Toplevel(a.root)
+        vWindow.title(videoURL)
+
+        # function to call the video
+        cap = cv2.VideoCapture(videoURL)
+
+        def updateFrame():
+            ret, frame = cap.read()
+            if ret:
+                # Rgb color 
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                img = Image.fromarray(frame)
+                imgtk = ImageTk.PhotoImage(image=img)
+
+                # lable images
+                label.imgtk = imgtk
+                label.configure(image=imgtk)
+
+                label.after(10, update_frame)
+            else:
+                cap.release()
+                vWindow.destroy()
+
+        label = tk.Label(vWindow)
+        label.pack()
+
+        # call the th function
+        updateFrame()
+
     @logMethodCall
     def translationB(a):
-        buttonFrame = ttk.Frame(a.root)
+        buttonFrame = ttk.Frame(a.root, style="Custom.TFrame")
         buttonFrame.pack(side=tk.TOP, fill=tk.X)
         tButton = ttk.Button(buttonFrame, text="Translated Text", command=a.showTranslation)
         tButton.pack(padx=10, pady=10)
@@ -125,11 +171,11 @@ class YouTubeApp(UserInterFace, Styling):
         translationWindow = tk.Toplevel(a.root)
         translationWindow.title("Translate Text")
 
-        ttk.Label(translationWindow, text="Enter text to translate:").grid(row=0, column=0, padx=10, pady=10)
+        ttk.Label(translationWindow, text="Enter text to translate:", style="Custom.TLabel").grid(row=0, column=0, padx=10, pady=10)
         textEntry = ttk.Entry(translationWindow, width=50)
         textEntry.grid(row=0, column=1, padx=10, pady=10)
 
-        ttk.Label(translationWindow, text="Select target language:").grid(row=1, column=0, padx=10, pady=10)
+        ttk.Label(translationWindow, text="Select target language:", style="Custom.TLabel").grid(row=1, column=0, padx=10, pady=10)
         langCbox = ttk.Combobox(translationWindow, values=["fr", "de", "es"])  # Example languages
         langCbox.grid(row=1, column=1, padx=10, pady=10)
         langCbox.current(0)
@@ -148,8 +194,8 @@ class YouTubeApp(UserInterFace, Styling):
 
     def translateText(a, text, targetLang):
         modelName = f'Helsinki-NLP/opus-mt-en-{targetLang}'
-        tokenizer = MarianTokenizer.from_pretrained(modelName)
-        model = MarianMTModel.from_pretrained(modelName)
+        tokenizer = MarianTokenizer.fromPretrained(modelName)
+        model = MarianMTModel.fromPretrained(modelName)
 
         translated = model.generate(**tokenizer(text, return_tensors="pt", padding=True))
         translatedT = tokenizer.decode(translated[0], skip_special_tokens=True)
@@ -160,8 +206,7 @@ class CustomYouTubeApp(YouTubeApp):
     @logMethodCall
     def header(a):
         super().header()
-        headerFrame = ttk.Frame(a.root)
+        headerFrame = ttk.Frame(a.root, style="Custom.TFrame")
         headerFrame.pack(side=tk.TOP, fill=tk.X)
-        a.applyStyle(headerFrame, "CustomHeader.TFrame")
-        subtitleLabel = ttk.Label(headerFrame, text="Welcome to the Custom YouTube App!", style="CustomHeader.TLabel")
+        subtitleLabel = ttk.Label(headerFrame, text="Welcome to the Custom YouTube App!", style="Custom.TLabel")
         subtitleLabel.pack(padx=10, pady=5)
