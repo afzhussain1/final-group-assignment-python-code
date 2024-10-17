@@ -41,6 +41,8 @@ This is a simple YouTube-like interface application built using Python and Tkint
     torch
     transformers
     tk
+    pillow
+    opencv-python
     ```
 
 ## Usage
@@ -49,6 +51,28 @@ This is a simple YouTube-like interface application built using Python and Tkint
     ```bash
     python main.py
     ```
+
+
+
+    ### main.py
+This is the main script where the application is initialized and run. It contains the primary class `YouTubeApp` and its methods.
+
+### user_interface.py
+This file contains the `UserInterFace` class, which manages the user interface components.
+
+### styling.py
+This file contains the `Styling` class, which is responsible for the application's visual styles and themes.
+
+### requirements.txt
+This file lists the dependencies required to run the application, such as `transformers`, `torch`, `tk`, `pillow`, and `opencv-python`.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your improvements.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 2. **Login or Signup**:
     - Enter a username and password to log in or sign up.
@@ -60,5 +84,4 @@ This is a simple YouTube-like interface application built using Python and Tkint
     - Click on the "Translate Text" button to open a new window where you can enter text and select a target language for translation.
 
 ## Project Structure
-
 
