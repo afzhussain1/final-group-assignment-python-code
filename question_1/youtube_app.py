@@ -204,7 +204,7 @@ class YouTubeApp:
     def translateText(a, text, targetLang):
         modelName = f'Helsinki-NLP/opus-mt-en-{targetLang}'
         tokenizer = MarianTokenizer.from_pretrained(modelName)  # method name to translate
-        model = MarianMTModel.from_pretrained(modelName)  
+        model = MarianMTModel.from_pretrained(modelName)  # translation call
 
         translated = model.generate(**tokenizer(text, return_tensors="pt", padding=True))
         translatedT = tokenizer.decode(translated[0], skip_special_tokens=True)
